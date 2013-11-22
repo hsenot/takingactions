@@ -29,10 +29,15 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery UI plugin, requirement for Flip! -->
+    <script src="jquery-ui.min.js"></script>
+    <!-- Flipping tile jQuery plugin -->
+    <script src="flip/jquery.flip.min.js"></script>
     <script>
 
       var tileH = 100;
       var tileW = 100;
+      var flipTransitions=['lr','rl','tb','bt'];
 
       var randomColorize = function(){
         return (Math.random().toString(16) + '000000').slice(2, 8);
@@ -56,7 +61,6 @@
 
       }
 
-
       $(document).ready(function(){
 
         $(window).resize(function() {
@@ -64,6 +68,14 @@
         });
 
         resize();
+
+        window.setInterval(function(){
+          $($("img")[Math.floor(Math.random()*24)]).flip({
+            direction: flipTransitions[Math.floor(Math.random()*4)],
+            content:'this is my new content',
+            speed:250
+          })
+        }, 5000);
 
       });
 
