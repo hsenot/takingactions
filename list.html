@@ -17,7 +17,37 @@
   <body>
     <div class="container" style="padding-top:15px;">
       <div class="jumbotron">
-        <h1>Task List</h1>
+        <h2>Task list</h2>
+        <div class="list-group">
+          <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">Task 1</h4>
+            <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">Task 2</h4>
+            <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">Task 3</h4>
+            <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">Task 4</h4>
+            <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">Task 5</h4>
+            <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <h4 class="list-group-item-heading">More tasks</h4>
+          </a>
+        </div>
+
+        <h2>Task generator</h2>
+        <!-- Include the project generator as an iframe? -->
+        <iframe id="tg" src="/task-generator" frameborder="0" height="300px"></iframe>
+
       </div>
     </div>
 
@@ -27,8 +57,17 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
 
+      var resize = function(){
+        $('#tg').css("width",$('.jumbotron').width());
+      }
+
       $(document).ready(function(){
 
+        $(window).resize(function() {
+          resize();
+        });
+
+        resize();
 
       });
 
