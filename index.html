@@ -70,12 +70,12 @@
         resize();
 
         window.setInterval(function(){
-          $($("img")[Math.floor(Math.random()*24)]).flip({
+          $($("img")[Math.floor(Math.random()*($("img").length))]).flip({
             direction: flipTransitions[Math.floor(Math.random()*4)],
             content:'this is my new content',
             speed:250
           })
-        }, 5000);
+        }, 3000);
 
       });
 
