@@ -20,22 +20,27 @@
         <h2>Task list</h2>
         <div class="list-group">
           <a href="#" class="list-group-item">
+            <span class="badge pull-right">42</span>
             <h4 class="list-group-item-heading">Task 1</h4>
             <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
           </a>
           <a href="#" class="list-group-item">
+            <span class="badge pull-right">18</span>
             <h4 class="list-group-item-heading">Task 2</h4>
             <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
           </a>
           <a href="#" class="list-group-item">
+            <span class="badge pull-right">9</span>
             <h4 class="list-group-item-heading">Task 3</h4>
             <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
           </a>
           <a href="#" class="list-group-item">
+            <span class="badge pull-right">4</span>
             <h4 class="list-group-item-heading">Task 4</h4>
             <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
           </a>
           <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
             <h4 class="list-group-item-heading">Task 5</h4>
             <p class="list-group-item-text">This is the description of the task, which can be quite long and spread over several lines.</p>
           </a>
@@ -43,11 +48,19 @@
             <h4 class="list-group-item-heading">More tasks</h4>
           </a>
         </div>
-
         <h2>Task generator</h2>
         <!-- Include the project generator as an iframe? -->
-        <iframe id="tg" src="/task-generator" frameborder="0" height="300px"></iframe>
-
+        <div id="tg" class="rounded" style="background-color:white;">
+          <div class="container">
+            <div class="pull-left">
+              <button class="btn btn-inverse" type="button" id="spinButton">Generate</button>
+            </div>
+            <div class="pull-right">
+              <button class="btn btn-inverse" type="button" id="checkoutButton">Undertake</button>
+            </div>
+          </div>
+          <div id="sentence" class="text-center"></div>
+        </div>
       </div>
     </div>
 
@@ -55,11 +68,23 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="tabletop/src/tabletop.js"></script>
     <script>
 
+      var a1=[],a2=[],a3=[];
+
       var resize = function(){
-        $('#tg').css("width",$('.jumbotron').width());
+        //$('#tg').css("width",$('.jumbotron').width());
       }
+
+      var randomValueAll = function(){
+        var d1 = a1[Math.floor(Math.random()*a1.length)];
+        var d2 = a2[Math.floor(Math.random()*a2.length)];
+        var d3 = a3[Math.floor(Math.random()*a3.length)];
+        $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
+      }
+
+      $('#spinButton').on('click',randomValueAll);
 
       $(document).ready(function(){
 
@@ -68,6 +93,23 @@
         });
 
         resize();
+
+        var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0Asxkb_brURPldDFUNlFzMVdBRnFvTVBnSFFwTkdsM1E&single=true&gid=6&output=html';
+
+        // Loading data from a Google spreadsheet
+        Tabletop.init({
+          key: public_spreadsheet_url,
+          callback: function(data, tabletop) {
+            $.each(data, function(key, value) {
+              a1.push(value.verb);
+              a2.push(value.concept);
+              a3.push(value.modifiermethodmaterial);
+            });
+
+            randomValueAll();
+          },
+          simpleSheet: true
+        });
 
       });
 
