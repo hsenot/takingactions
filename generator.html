@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Taking Action(s)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .navbar-brand {
+          padding: 5px;
+      }    
+    </style>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><p style="width: 50px; text-align:center;font-size: 10px;line-height:20px;margin-bottom:0px;">Taking Action(s)</p></a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="project.html">Home</a></li>
+          <li class="active"><a href="generator.html">Generator</a></li>
+          <li><a href="list.html">List</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div class="container" style="padding-top:15px;">
+      <div class="jumbotron">
+        <!-- Include the project generator as an iframe? -->
+        <div id="tg" class="rounded" style="background-color:white; padding:10px;">
+          <!-- div class="container" -->
+            <div class="pull-left">
+              <button class="btn btn-inverse" type="button" id="spinButton">Generate</button>
+            </div>
+            <div class="pull-right">
+              <button class="btn btn-inverse" type="button" id="checkoutButton">Undertake</button>
+            </div>
+            <br>
+            <div>
+              <div id="sentence" class="text-center" style="font-size:30px;"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="tabletop/src/tabletop.js"></script>
+    <script>
+
+      var a1=[],a2=[],a3=[];
+
+      var resize = function(){
+        //$('#tg').css("width",$('.jumbotron').width());
+      }
+
+      var randomValueAll = function(){
+        var d1 = a1[Math.floor(Math.random()*a1.length)];
+        var d2 = a2[Math.floor(Math.random()*a2.length)];
+        var d3 = a3[Math.floor(Math.random()*a3.length)];
+        $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
+      }
+
+      $('#spinButton').on('click',randomValueAll);
+
+      $(document).ready(function(){
+
+        $(window).resize(function() {
+          resize();
+        });
+
+        resize();
+
+        var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0Asxkb_brURPldDFUNlFzMVdBRnFvTVBnSFFwTkdsM1E&single=true&gid=6&output=html';
+
+        // Loading data from a Google spreadsheet
+        Tabletop.init({
+          key: public_spreadsheet_url,
+          callback: function(data, tabletop) {
+            $.each(data, function(key, value) {
+              a1.push(value.verb);
+              a2.push(value.concept);
+              a3.push(value.modifiermethodmaterial);
+            });
+
+            randomValueAll();
+          },
+          simpleSheet: true
+        });
+
+      });
+
+    </script>
+  </body>
+</html>
