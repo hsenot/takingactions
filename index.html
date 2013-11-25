@@ -19,8 +19,8 @@
       }
     </style>
   </head>
-  <body>
-    <div style="padding: 0 15px;">
+  <body style="background-color:black;">
+    <div id="cont">
       <div id="gridContainer" class="row">
       </div>
     </div>
@@ -35,6 +35,7 @@
     <script src="flip/jquery.flip.min.js"></script>
     <script>
 
+      var fna = [];
       var tileH = 100;
       var tileW = 100;
       var flipTransitions=['lr','rl','tb','bt'];
@@ -44,12 +45,16 @@
       }
 
       var pumpADiv = function(){
-        return '<img src="http://placehold.it/'+tileH+'x'+tileW+'/'+randomColorize()+'" class="img-responsive">';
+        return '<img src="images/'+fna[Math.floor(Math.random()*fna.length)]+'" height="'+tileH+'" width="'+tileW+'" class="img-responsive">';
       }
 
       var resize = function(){
         var h = $(window).height();
         var w = $(window).width();
+
+        $('#cont').css("margin-top",(h % tileH)/2);
+        $('#gridContainer').css("margin-left",(w % tileW)/2);
+        $("body").css("overflow", "hidden");
 
         var numberOfTileToCoverScreen = Math.floor(h / tileH) * Math.floor(w / tileW);
 
@@ -61,13 +66,16 @@
 
       }
 
+      $.getJSON( "ws/ws_get_img_filenames.php", function( data ) {
+        fna = data.rows;
+        resize();
+      });
+
       $(document).ready(function(){
 
         $(window).resize(function() {
           resize();
         });
-
-        resize();
 
         window.setInterval(function(){
           $($("img")[Math.floor(Math.random()*($("img").length))]).flip({
