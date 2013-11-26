@@ -44,78 +44,7 @@
 
     <div class="container" style="padding-top:15px;">
       <div class="jumbotron">
-        <div class="list-group">
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">42</span>
-            <p class="list-group-item-text">Illustrate with 5 gestures, good and bad with the first pencil you find</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">18</span>
-            <p class="list-group-item-text">Print out the amount of free time you have in blue hues</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">9</span>
-            <p class="list-group-item-text">Find an image of the moon by deduction</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">4</span>
-            <p class="list-group-item-text">Dress in something slightly uncomfortable today and tell us about it</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Think about what others might be thinking about</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">18</span>
-            <p class="list-group-item-text">Submit an instruction for a user-guide</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">9</span>
-            <p class="list-group-item-text">Draw a round table</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">4</span>
-            <p class="list-group-item-text">Submit the dimensions and colour of a triangle</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Describe the location you will be in next week</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Make a sign of a capitalist notion without thinking too much</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Multiply a collection of orange and red things so it reflects your values</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Speak a circle for yourself</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Pair positive images of collective action during work hours</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Email an incomplete draft with the subject heading 'NOT FINAL'</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Redefine the meaning of solution</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Find something that looks like something else</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <span class="badge pull-right">2</span>
-            <p class="list-group-item-text">Wear something uncomfortable and tell us about it</p>
-          </a>
-          <a href="#" class="list-group-item">
-            <h4 class="list-group-item-heading">More tasks</h4>
-          </a>
+        <div id="mylistgroup" class="list-group">
         </div>
       </div>
     </div>
@@ -127,6 +56,41 @@
     <script src="tabletop/src/tabletop.js"></script>
     <script>
       // Nothing here yet!
+      var list_array = [
+        {"label":'Illustrate with 5 gestures, good and bad with the first pencil you find',"iterations":42},
+        {"label":'Print out the amount of free time you have in blue hues',"iterations":34},
+        {"label":'Find an image of the moon by deduction',"iterations":26},
+        {"label":'Wear something slightly uncomfortable today and tell us about it',"iterations":25},
+        {"label":'Think about what others might be thinking about',"iterations":21},
+        {"label":'Submit an instruction for a user-guide',"iterations":18},
+        {"label":'Draw a round table',"iterations":12},
+        {"label":'Submit the dimensions and colour of a triangle',"iterations":6},
+        {"label":'Describe the location you will be in next week',"iterations":5},
+        {"label":'Make a sign of a capitalist notion without thinking too much',"iterations":5},
+        {"label":'Multiply a collection of orange and red things so it reflects your values',"iterations":4},
+        {"label":'Speak a circle for yourself',"iterations":2},
+        {"label":'Pair positive images of collective action during work hours',"iterations":2},
+        {"label":'Email an incomplete draft with the subject heading \'NOT FINAL\'',"iterations":2},
+        {"label":'Redefine the meaning of solution',"iterations":2},
+        {"label":'Find something that looks like something else',"iterations":1}
+      ];
+
+      // Transforms an array element into a list item
+      var pumpAnItemList = function(idx){
+        return '<a href="#" class="list-group-item">\
+                  <span class="badge pull-right">'+list_array[i].iterations+'</span>\
+                  <p class="list-group-item-text">'+list_array[i].label+'</p></a>';
+      }
+
+      // Adding the list items in the list group
+      for (var i=0;i<list_array.length;i++)
+      {
+        $('#mylistgroup').append($(pumpAnItemList(i)));     
+      }
+
+      // Adding the more tasks button
+      $('#mylistgroup').append($('<a href="#" class="list-group-item"><h4 class="list-group-item-heading">More tasks</h4></a>'));
+
     </script>
   </body>
 </html>
