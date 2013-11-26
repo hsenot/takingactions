@@ -82,6 +82,38 @@
             <p class="list-group-item-text">Describe the location you will be in next week</p>
           </a>
           <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Make a sign of a capitalist notion without thinking too much</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Multiply a collection of orange and red things so it reflects your values</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Speak a circle for yourself</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Pair positive images of collective action during work hours</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Email an incomplete draft with the subject heading 'NOT FINAL'</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Redefine the meaning of solution</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Find something that looks like something else</p>
+          </a>
+          <a href="#" class="list-group-item">
+            <span class="badge pull-right">2</span>
+            <p class="list-group-item-text">Wear something uncomfortable and tell us about it</p>
+          </a>
+          <a href="#" class="list-group-item">
             <h4 class="list-group-item-heading">More tasks</h4>
           </a>
         </div>
@@ -94,49 +126,7 @@
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="tabletop/src/tabletop.js"></script>
     <script>
-
-      var a1=[],a2=[],a3=[];
-
-      var resize = function(){
-        //$('#tg').css("width",$('.jumbotron').width());
-      }
-
-      var randomValueAll = function(){
-        var d1 = a1[Math.floor(Math.random()*a1.length)];
-        var d2 = a2[Math.floor(Math.random()*a2.length)];
-        var d3 = a3[Math.floor(Math.random()*a3.length)];
-        $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
-      }
-
-      $('#spinButton').on('click',randomValueAll);
-
-      $(document).ready(function(){
-
-        $(window).resize(function() {
-          resize();
-        });
-
-        resize();
-
-        var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0Asxkb_brURPldDFUNlFzMVdBRnFvTVBnSFFwTkdsM1E&single=true&gid=6&output=html';
-
-        // Loading data from a Google spreadsheet
-        Tabletop.init({
-          key: public_spreadsheet_url,
-          callback: function(data, tabletop) {
-            $.each(data, function(key, value) {
-              a1.push(value.verb);
-              a2.push(value.concept);
-              a3.push(value.modifiermethodmaterial);
-            });
-
-            randomValueAll();
-          },
-          simpleSheet: true
-        });
-
-      });
-
+      // Nothing here yet!
     </script>
   </body>
 </html>

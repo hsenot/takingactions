@@ -70,10 +70,6 @@
 
       var a1=[],a2=[],a3=[];
 
-      var resize = function(){
-        //$('#tg').css("width",$('.jumbotron').width());
-      }
-
       var randomValueAll = function(){
         var d1 = a1[Math.floor(Math.random()*a1.length)];
         var d2 = a2[Math.floor(Math.random()*a2.length)];
@@ -85,12 +81,6 @@
 
       $(document).ready(function(){
 
-        $(window).resize(function() {
-          resize();
-        });
-
-        resize();
-
         var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0Asxkb_brURPldDFUNlFzMVdBRnFvTVBnSFFwTkdsM1E&single=true&gid=6&output=html';
 
         // Loading data from a Google spreadsheet
@@ -98,9 +88,9 @@
           key: public_spreadsheet_url,
           callback: function(data, tabletop) {
             $.each(data, function(key, value) {
-              a1.push(value.verb);
-              a2.push(value.concept);
-              a3.push(value.modifiermethodmaterial);
+              if (value.verb) {a1.push(value.verb);}
+              if (value.concept) {a2.push(value.concept);}
+              if (value.modifiermethodmaterial) {a3.push(value.modifiermethodmaterial);}
             });
 
             randomValueAll();
