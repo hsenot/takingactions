@@ -68,6 +68,9 @@
     <script src="tabletop/src/tabletop.js"></script>
     <script>
 
+      // Loading indicator while the spreadsheet loads
+      $('#sentence').html("<img src='loading.gif'>");
+
       var a1=[],a2=[],a3=[];
 
       var randomValueAll = function(){
@@ -76,8 +79,6 @@
         var d3 = a3[Math.floor(Math.random()*a3.length)];
         $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
       }
-
-      $('#spinButton').on('click',randomValueAll);
 
       $(document).ready(function(){
 
@@ -92,11 +93,29 @@
               if (value.concept) {a2.push(value.concept);}
               if (value.modifiermethodmaterial) {a3.push(value.modifiermethodmaterial);}
             });
-
             randomValueAll();
           },
           simpleSheet: true
         });
+
+        // Spin button: refreshes with a random combination
+        $('#spinButton').on('click',randomValueAll);
+
+        // Checkout button: insert the task in the database and moves to the detail page
+        $('#checkoutButton').on('click',function(){
+          // Inserting the task into the table of tasks
+          var p_task_label = $('#sentence').html();
+          $.getJSON("ws/ws_insert_task.php",
+                {
+                  task_label: p_task_label.substring(0,p_task_label.length-2)
+                },
+                function(json){
+                  //alert('Task inserted successfully with id'+json.inserted_id);
+                  // Now moving to the detail page with this task id
+                }
+          );
+        });
+
 
       });
 
