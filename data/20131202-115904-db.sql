@@ -4,37 +4,10 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
--- Name: postgis; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
-
-
---
--- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
-
+SET escape_string_warning = off;
 
 SET search_path = public, pg_catalog;
 
@@ -76,8 +49,8 @@ ALTER TABLE public.task_contribution OWNER TO opengeo;
 CREATE SEQUENCE task_contribution_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MINVALUE
     NO MAXVALUE
+    NO MINVALUE
     CACHE 1;
 
 
@@ -104,8 +77,8 @@ SELECT pg_catalog.setval('task_contribution_id_seq', 1, false);
 CREATE SEQUENCE task_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MINVALUE
     NO MAXVALUE
+    NO MINVALUE
     CACHE 1;
 
 
@@ -122,7 +95,7 @@ ALTER SEQUENCE task_id_seq OWNED BY task.id;
 -- Name: task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: opengeo
 --
 
-SELECT pg_catalog.setval('task_id_seq', 21, true);
+SELECT pg_catalog.setval('task_id_seq', 22, true);
 
 
 --
@@ -145,8 +118,8 @@ ALTER TABLE public.task_undertaken OWNER TO opengeo;
 CREATE SEQUENCE task_undertaken_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MINVALUE
     NO MAXVALUE
+    NO MINVALUE
     CACHE 1;
 
 
@@ -188,14 +161,6 @@ ALTER TABLE ONLY task_undertaken ALTER COLUMN id SET DEFAULT nextval('task_under
 
 
 --
--- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM stdin;
-\.
-
-
---
 -- Data for Name: task; Type: TABLE DATA; Schema: public; Owner: opengeo
 --
 
@@ -219,6 +184,7 @@ COPY task (id, label, ts_created) FROM stdin;
 21	Bring an alternative together	2013-12-02 10:27:10.394017+11
 20	Improve something over time\n	2013-12-02 10:21:40.508081+11
 19	Redesign something new while referring to beehives\n	2013-12-02 10:17:54.446327+11
+22	Connect a community in photoshop	2013-12-02 11:51:18.099026+11
 \.
 
 
@@ -260,37 +226,6 @@ ALTER TABLE ONLY task
 
 ALTER TABLE ONLY task_undertaken
     ADD CONSTRAINT task_undertaken_pk PRIMARY KEY (id);
-
-
---
--- Name: geometry_columns_delete; Type: RULE; Schema: public; Owner: postgres
---
-
-CREATE RULE geometry_columns_delete AS ON DELETE TO geometry_columns DO INSTEAD NOTHING;
-
-
---
--- Name: geometry_columns_insert; Type: RULE; Schema: public; Owner: postgres
---
-
-CREATE RULE geometry_columns_insert AS ON INSERT TO geometry_columns DO INSTEAD NOTHING;
-
-
---
--- Name: geometry_columns_update; Type: RULE; Schema: public; Owner: postgres
---
-
-CREATE RULE geometry_columns_update AS ON UPDATE TO geometry_columns DO INSTEAD NOTHING;
-
-
---
--- Name: public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
