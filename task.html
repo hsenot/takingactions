@@ -37,14 +37,14 @@
         <ul class="nav navbar-nav">
           <li><a href="project.html">Home</a></li>
           <li><a href="generator.html">Generator</a></li>
-          <li class="active"><a href="#">List</a></li>
+          <li><a href="list.html">List</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
 
     <div class="container" style="padding-top:15px;">
       <div class="jumbotron">
-        <div id="mylistgroup" class="list-group">
+        <div id="mytask" class="text-center" style="font-size:48px;">
         </div>
       </div>
     </div>
@@ -54,28 +54,24 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
+      function getUrlVar(key){
+        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+        return result && unescape(result[1]) || ""; 
+      }
+
+      var task_id = getUrlVar('id');
+
       // Getting the task list from the database
-      $.getJSON("ws/ws_get_task_list.php",function(json){
-
-        var list_array = json.rows;
-
-        // Transforms an array element into a list item
-        var pumpAnItemList = function(idx){
-          var iter = list_array[i].iterations;
-          if (!iter) {iter=0;}
-          return '<a href="task.html?id='+list_array[i].id+'" class="list-group-item">\
-                    <span class="badge pull-right">'+iter+'</span>\
-                    <p class="list-group-item-text">'+list_array[i].label+'</p></a>';
-        }
-
-        // Adding the list items in the list group
-        for (var i=0;i<list_array.length;i++)
+      $.getJSON("ws/ws_get_task.php",
         {
-          $('#mylistgroup').append($(pumpAnItemList(i)));     
-        }
+          id: task_id
+        },
+        function(json){
 
-        // Adding the more tasks button
-        $('#mylistgroup').append($('<a href="#" class="list-group-item"><p class="list-group-item-text">More tasks</p></a>'));
+          var task = json.rows[0];
+
+          // Insert task text into its div
+          $('#mytask').html(task.label);
 
       })
 

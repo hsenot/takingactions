@@ -55,7 +55,7 @@
             </div>
             <br>
             <div>
-              <div id="sentence" class="text-center" style="font-size:30px;"></div>
+              <div id="sentence" class="text-center" style="font-size:48px;"></div>
             </div>
         </div>
       </div>
@@ -110,8 +110,8 @@
                   task_label: p_task_label.substring(0,p_task_label.length-2)
                 },
                 function(json){
-                  //alert('Task inserted successfully with id'+json.inserted_id);
                   // Now moving to the detail page with this task id
+                  window.location="task.html?id="+json.inserted_id;
                 }
           );
         });
