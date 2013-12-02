@@ -54,23 +54,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
-      // insert into task (label) values ('Illustrate with 5 gestures, good and bad with the first pencil you find');
-      // insert into task (label) values ('Print out the amount of free time you have in blue hues');
-      // insert into task (label) values ('Find an image of the moon by deduction');
-      // insert into task (label) values ('Wear something slightly uncomfortable today and tell us about it');
-      // insert into task (label) values ('Think about what others might be thinking about');
-      // insert into task (label) values ('Submit an instruction for a user-guide');
-      // insert into task (label) values ('Draw a round table');
-      // insert into task (label) values ('Submit the dimensions and colour of a triangle');
-      // insert into task (label) values ('Describe the location you will be in next week');
-      // insert into task (label) values ('Make a sign of a capitalist notion without thinking too much');
-      // insert into task (label) values ('Multiply a collection of orange and red things so it reflects your values');
-      // insert into task (label) values ('Speak a circle for yourself');
-      // insert into task (label) values ('Pair positive images of collective action during work hours');
-      // insert into task (label) values ('Email an incomplete draft with the subject heading ''NOT FINAL''');
-      // insert into task (label) values ('Redefine the meaning of solution');
-      // insert into task (label) values ('Find something that looks like something else');
-
+      // Getting the task list from the database
       $.getJSON("ws/ws_get_task_list.php",function(json){
 
         var list_array = json.rows;
