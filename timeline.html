@@ -37,16 +37,17 @@
         <ul class="nav navbar-nav">
           <li><a href="project.html">Home</a></li>
           <li><a href="generator.html">Generator</a></li>
-          <li class="active"><a href="#">List</a></li>
-          <li><a href="timeline.html">Timeline</a></li>  
+          <li><a href="list.html">List</a></li>
+          <li class="active"><a href="#">Timeline</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
 
     <div class="container" style="padding-top:15px;">
-      <div class="jumbotron">
-        <div id="mylistgroup" class="list-group">
-        </div>
+      <div style="width:700px;float:none;margin:0 auto;">
+          <h3>Actions undertaken</h3>
+          <div id="my-timeline">
+          </div>
       </div>
     </div>
 
@@ -54,32 +55,36 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- BEGIN TimelineJS -->
+    <script src="TimelineJS/compiled/js/storyjs-embed.js"></script>    
     <script>
-      // Getting the task list from the database
-      $.getJSON("ws/ws_get_task_list.php",function(json){
 
-        var list_array = json.rows;
+      $(document).ready(function() {
 
-        // Transforms an array element into a list item
-        var pumpAnItemList = function(idx){
-          var iter = list_array[i].iterations;
-          if (!iter) {iter=0;}
-          return '<a href="task.html?id='+list_array[i].id+'" class="list-group-item">\
-                    <span class="badge pull-right">'+iter+'</span>\
-                    <p class="list-group-item-text">'+list_array[i].label+'</p></a>';
-        }
+        $.getJSON("ws/ws_get_timeline_events.php",
+          function(json){
+            var dated_events = json.rows;
 
-        // Adding the list items in the list group
-        for (var i=0;i<list_array.length;i++)
-        {
-          $('#mylistgroup').append($(pumpAnItemList(i)));     
-        }
+            var dataObject = {
+              timeline: {
+                "headline":"Actions undertaken",
+                "type":"default",
+                "text":"Recently",
+                "date": dated_events 
+              }
+            };
+            createStoryJS({
+                type:       'timeline',
+                width:      '700',
+                height:     '500',
+                source:     dataObject,
+                embed_id:   'my-timeline',
+                start_at_end: true,
+                debug: true  
+            });
+        });
 
-        // Adding the more tasks button
-        $('#mylistgroup').append($('<a href="#" class="list-group-item"><p class="list-group-item-text">More tasks</p></a>'));
-
-      })
-
+      });
 
     </script>
   </body>
