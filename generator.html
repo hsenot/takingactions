@@ -73,10 +73,32 @@
 
       var a1=[],a2=[],a3=[];
 
+      function getRandomInt (min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      var replaceRandomValueInRange = function(str){
+        var r = /{(\d+)-(\d+)}/;
+        var res = str.match(r);
+        if (res)
+        {
+          return str.replace(res[0],getRandomInt(parseInt(res[1]),parseInt(res[2])));
+        }
+        else
+        {
+          return str;
+        }
+      }
+
       var randomValueAll = function(){
-        var d1 = a1[Math.floor(Math.random()*a1.length)];
-        var d2 = a2[Math.floor(Math.random()*a2.length)];
-        var d3 = a3[Math.floor(Math.random()*a3.length)];
+        var i1 = Math.floor(Math.random()*a1.length);
+        var i2 = Math.floor(Math.random()*a2.length);
+        var i3 = Math.floor(Math.random()*a3.length);
+
+        var d1 = replaceRandomValueInRange(a1[i1]);
+        var d2 = replaceRandomValueInRange(a2[i2]);
+        var d3 = replaceRandomValueInRange(a3[i3]);
+
         $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
       }
 
