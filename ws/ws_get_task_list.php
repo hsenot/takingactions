@@ -24,7 +24,7 @@ try {
 	$pgconn = pgConnection();
 
 	// Inserting the observation
-	$sql = "SELECT t.id,t.label,(select count(*) from task_undertaken tu WHERE t.id=tu.task_id) as iterations FROM task t";
+	$sql = "SELECT t.id,t.label,(select count(*) from task_undertaken tu WHERE t.id=tu.task_id) as iterations FROM task t ORDER BY iterations DESC";
     $recordSet = $pgconn->prepare($sql);
     $recordSet->execute();
 

@@ -61,7 +61,7 @@
 
       var task_id = getUrlVar('id');
 
-      // Getting the task list from the database
+      // Getting the task from the database
       $.getJSON("ws/ws_get_task.php",
         {
           id: task_id
@@ -74,7 +74,6 @@
           $('#mytask').html(task.label);
 
       })
-
 
     </script>
   </body>

@@ -23,6 +23,11 @@ try {
 	// Opening up DB connection
 	$pgconn = pgConnection();
 
+    // Inserting a record into the task_undertaken table
+    $sql = "INSERT INTO task_undertaken (task_id) VALUES (".$p_task_id.")";
+    $recordSet = $pgconn->prepare($sql);
+    $recordSet->execute();
+
 	// Inserting the observation
 	$sql = "SELECT t.id,t.label,(select count(*) from task_undertaken tu WHERE t.id=tu.task_id) as iterations FROM task t WHERE t.id=".$p_task_id;
     $recordSet = $pgconn->prepare($sql);
