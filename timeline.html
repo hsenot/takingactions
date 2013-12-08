@@ -15,7 +15,11 @@
     <style>
       .navbar-brand {
           padding: 5px;
-      }    
+      }
+
+      .navbar {
+        margin-bottom:0px;
+      }
     </style>
     
   </head>
@@ -43,9 +47,8 @@
       </div><!-- /.navbar-collapse -->
     </nav>
 
-    <div class="container" style="padding-top:15px;">
-      <div style="width:700px;float:none;margin:0 auto;">
-          <h3>Actions undertaken</h3>
+    <div style="padding:10px;">
+      <div id="timelinecont" style="width:700px;float:none;margin:0 auto;">
           <div id="my-timeline">
           </div>
       </div>
@@ -59,29 +62,46 @@
     <script src="TimelineJS/compiled/js/storyjs-embed.js"></script>    
     <script>
 
+      var dataObject = {
+        "timeline": {
+          "headline":"Actions undertaken",
+          "type":"default",
+          "text":"Recently",
+          "date": [] 
+        }
+      };
+
+      var resize = function(){
+        var h = $(window).height();
+        var w = $(window).width();
+
+        $('#timelinecont').css("width",w);
+        $("body").css("overflow", "hidden");
+        $('#my-timeline').empty();
+
+        createStoryJS({
+            type:       'timeline',
+            width:      w-20,
+            height:     h-55,
+            source:     dataObject,
+            embed_id:   'my-timeline',
+            start_at_end: true,
+            debug: true  
+        });
+      }
+
       $(document).ready(function() {
 
         $.getJSON("ws/ws_get_timeline_events.php",
           function(json){
             var dated_events = json.rows;
+            dataObject.timeline.date = dated_events;
+            resize();
 
-            var dataObject = {
-              timeline: {
-                "headline":"Actions undertaken",
-                "type":"default",
-                "text":"Recently",
-                "date": dated_events 
-              }
-            };
-            createStoryJS({
-                type:       'timeline',
-                width:      '700',
-                height:     '500',
-                source:     dataObject,
-                embed_id:   'my-timeline',
-                start_at_end: true,
-                debug: true  
+            $(window).resize(function() {
+              resize();
             });
+
         });
 
       });
