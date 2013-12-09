@@ -24,7 +24,7 @@ try {
 	$pgconn = pgConnection();
 
 	// Inserting the observation
-	$sql = "SELECT t.id,t.label||' <a href=\\\"task.html?id='||t.id||'\\\"><span class=\\\"badge\\\">'||(select count(*) from task_undertaken tu2 where tu2.task_id=t.id)||'</span></a>' as headline,to_char(ts_undertaken,'YYYY,MM,DD,HH24,MI,SS') as \"startDate\" FROM task t,task_undertaken tu WHERE t.id=tu.task_id";
+	$sql = "SELECT t.id,t.label||' <a href=''task.html?id='||t.id||'''><span class=''badge''>'||(select count(*) from task_undertaken tu2 where tu2.task_id=t.id)||'</span></a>' as headline,to_char(ts_undertaken,'YYYY,MM,DD,HH24,MI,SS') as \"startDate\" FROM task t,task_undertaken tu WHERE t.id=tu.task_id";
     $recordSet = $pgconn->prepare($sql);
     $recordSet->execute();
 
