@@ -67,6 +67,8 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- jQuery plugin for text size -->
+    <script src="FitText.js/jquery.fittext.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="tabletop/src/tabletop.js"></script>
@@ -104,6 +106,7 @@
         var d3 = replaceRandomValueInRange(a3[i3]);
 
         $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
+        $('#sentence').fitText();
       }
 
       $(document).ready(function(){
