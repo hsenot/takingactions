@@ -10,14 +10,6 @@ require_once("inc/database.inc.php");
 require_once("inc/security.inc.php");
 require_once("inc/json.pdo.inc.php");
 
-# Retrieve URL arguments
-try {
-	$p_task_id = $_REQUEST['id'];
-}
-catch (Exception $e) {
-    trigger_error("Caught Exception: " . $e->getMessage(), E_USER_ERROR);
-}
-
 # Performs the query and returns XML or JSON
 try {
 	// Opening up DB connection
