@@ -15,7 +15,7 @@
 
     <style>
       .img-responsive {
-        display:inline;
+        display:inline-block;
       }
     </style>
   </head>
@@ -45,7 +45,7 @@
       }
 
       var pumpADiv = function(){
-        return '<img src="images/'+fna[Math.floor(Math.random()*fna.length)]+'" height="'+tileH+'" width="'+tileW+'" class="img-responsive">';
+        return '<div class="toflip img-responsive"><img src="images/'+fna[Math.floor(Math.random()*fna.length)]+'" height="'+tileH+'" width="'+tileW+'"></div>';
       }
 
       var resize = function(){
@@ -78,9 +78,9 @@
         });
 
         window.setInterval(function(){
-          $($("img")[Math.floor(Math.random()*($("img").length))]).flip({
+          $($("div.toflip")[Math.floor(Math.random()*($("img").length))]).flip({
             direction: flipTransitions[Math.floor(Math.random()*4)],
-            content:'this is my new content',
+            content:'<div class="img-responsive" style="text-align:center;width:'+tileW+'px;">task</div>',
             speed:250
           })
         }, 2000);
