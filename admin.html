@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Taking Action(s)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .navbar-brand {
+          padding: 5px;
+      }    
+    </style>
+    
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><p style="width: 50px; text-align:center;font-size: 10px;line-height:20px;margin-bottom:0px;">Taking Action(s)</p></a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="project.html">Home</a></li>
+          <li><a href="generator.html">Generator</a></li>
+          <li class="active"><a href="#">List</a></li>
+          <li><a href="timeline.html">Timeline</a></li>  
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div class="container" style="padding-top:15px;">
+      <div class="jumbotron">
+        Tasks, with optional contributions:
+        <div>
+          <form class="form-inline" role="form">
+            <div class="form-group">
+              <input type="text" class="form-control input-lg" id="taskText" placeholder="Type a task here ...">
+            </div>
+            <button class="btn btn-inverse" type="button" id="checkoutButton">Add it!</button>
+          </form>
+        </div>
+        <div id="mylistgroup" class="list-group">
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding-top:15px;">
+      <div class="jumbotron">
+        Images present on the server but not attached to a task (<p id="list2nb" style="display:inline;"></p> elements)
+        <div id="mylistgroup2" class="list-group">
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script>
+      var filename_array = [];
+
+      $.getJSON("ws/ws_get_img_filenames.php",function(filename_json){
+
+        filename_array = filename_json.rows.sort();
+        // Getting the task list from the database
+        $.getJSON("ws/ws_get_task_contributions.php",function(json){
+
+          var list_array = json.rows;
+
+          // Transforms an array element into a list item
+          var pumpAnItemList = function(idx){
+            var img_tag='';
+            if (!list_array[idx].url) {
+              img_tag = '<div>\
+          <form class="form-inline" role="form">\
+            <div class="form-group">\
+              <select id="taskURL'+list_array[idx].id+'" class="form-control fileselect">';
+              for (var k=0;k<filename_array.length;k++)
+              {
+                img_tag += '<option>'+filename_array[k]+'</option>';
+              }
+              img_tag +='</select>\
+            </div>\
+            <button class="btn btn-inverse taskURLbtn" type="button" id="taskURLbtn'+list_array[idx].id+'">Link it!</button>\
+          </form>\
+        </div>';
+            }
+            else
+            {
+              var j = filename_array.indexOf(list_array[idx].url);
+              if (j > -1)
+              {
+                // Removing the element from the list of filenames
+                filename_array.splice(j,1);
+              }
+              img_tag = '<img src="images/'+list_array[idx].url+'" width=50 height=50>';
+            }
+            return '<div class="well"><a href="task.html?id='+list_array[idx].id+'" class="list-group-item">\
+                      <p class="list-group-item-text">'+list_array[idx].label+'</p></a>'+img_tag+'</div>';
+          }
+
+          // Adding the list items in the list group
+          for (var i=0;i<list_array.length;i++)
+          {
+            $('#mylistgroup').append($(pumpAnItemList(i)));     
+          }
+
+          var pumpAnItemList2 = function(idx){
+            return '<p class="list-group-item-text">'+filename_array[idx]+'</p>';            
+          }
+
+          // Adding the list items in the list group
+          for (var i=0;i<filename_array.length;i++)
+          {
+            $('#mylistgroup2').append($(pumpAnItemList2(i)));     
+          }
+
+          $('#list2nb').html(filename_array.length);
+
+          $('button.taskURLbtn').on('click',function(){
+            // Inserting the task into the table of tasks
+            var p_task_id = $(this).attr("id").replace("taskURLbtn","");
+            $.getJSON("ws/ws_insert_task_contribution.php",
+              {
+                task_id: p_task_id,
+                photo_url: $('#taskURL'+p_task_id+' option:selected').text()
+              },
+              function(json){
+                // Now moving to the detail page with this task id
+                window.location="admin.html";
+              }
+            );
+          });
+
+        });
+
+      });
+
+      // Checkout button: insert the task in the database and moves to the detail page
+      $('#checkoutButton').on('click',function(){
+        // Inserting the task into the table of tasks
+        var p_task_label = $('#taskText').val();
+        if (p_task_label)
+        {
+          $.getJSON("ws/ws_insert_task.php",
+                {
+                  task_label: p_task_label
+                },
+                function(json){
+                  // Now moving to the detail page with this task id
+                  //window.location="task.html?id="+json.inserted_id;
+                }
+          );
+        }
+      });
+
+    </script>
+  </body>
+</html>
