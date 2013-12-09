@@ -15,7 +15,11 @@
     <style>
       .navbar-brand {
           padding: 5px;
-      }    
+      }
+
+      .navbar {
+        margin-bottom:0px;
+      }
     </style>
 
   </head>
@@ -36,9 +40,8 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="project.html">Home</a></li>
-          <li class="active"><a href="generator.html">Generator</a></li>
-          <li><a href="list.html">List</a></li>
           <li><a href="timeline.html">Timeline</a></li>  
+          <li class="active"><a href="generator.html">Generator</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
@@ -50,12 +53,14 @@
           <div class="pull-left">
             <button class="btn btn-inverse" type="button" id="spinButton">Generate</button>
           </div>
-          <div class="pull-right">
-            <button class="btn btn-inverse" type="button" id="checkoutButton">Undertake</button>
-          </div>
-          <br><br>
+          <br>
+          <br>
+          <br>
           <div>
             <div id="sentence" class="text-center" style="font-size:48px;"></div>
+          </div>
+          <div class="pull-right">
+            <button class="btn btn-inverse" type="button" id="checkoutButton">Undertake</button>
           </div>
       </div>
     </div>
