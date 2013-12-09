@@ -35,17 +35,36 @@
     <script src="flip/jquery.flip.min.js"></script>
     <script>
 
-      var fna = [];
+      var fna,fna2,x,interv,idx_arr=[];
       var tileH = 150;
       var tileW = 150;
       var flipTransitions=['lr','rl','tb','bt'];
+
+      function shuffle(array) {
+          var p, n, tmp;
+          for (p = array.length; p;) {
+              n = Math.random() * p-- | 0;
+              tmp = array[n];
+              array[n] = array[p];
+              array[p] = tmp;
+          }
+      }
+
+      function pickRandomProperty(obj) {
+          var result;
+          var count = 0;
+          for (var prop in obj)
+              if (Math.random() < 1/++count)
+                 result = prop;
+          return result;
+      }
 
       var randomColorize = function(){
         return (Math.random().toString(16) + '000000').slice(2, 8);
       }
 
       var pumpADiv = function(){
-        return '<div class="toflip img-responsive"><img src="images/'+fna[Math.floor(Math.random()*fna.length)]+'" height="'+tileH+'" width="'+tileW+'"></div>';
+        return '<div class="toflip img-responsive"><img src="images/'+fna[pickRandomProperty(fna)]+'" height="'+tileH+'" width="'+tileW+'"></div>';
       }
 
       var resize = function(){
@@ -58,6 +77,12 @@
 
         var numberOfTileToCoverScreen = Math.floor(h / tileH) * Math.floor(w / tileW);
 
+        for (i = 0; i < numberOfTileToCoverScreen+1; i++) {
+            idx_arr[i] = i;
+        }
+
+        shuffle(idx_arr);
+
         $('#gridContainer').empty();
         for (i=0;i<numberOfTileToCoverScreen;i++)
         {
@@ -66,8 +91,13 @@
 
       }
 
-      $.getJSON( "ws/ws_get_img_filenames.php", function( data ) {
-        fna = data.rows;
+      $.getJSON( "ws/ws_get_tasks_and_images.php", function( data ) {
+        fna = {}, fna2 = {};
+        for (r in data.rows)
+        {
+          fna[data.rows[r].task] = data.rows[r].image;
+          fna2[data.rows[r].image]= data.rows[r].task;
+        }
         resize();
       });
 
@@ -77,12 +107,20 @@
           resize();
         });
 
-        window.setInterval(function(){
-          $($("div.toflip")[Math.floor(Math.random()*($("img").length))]).flip({
+        interv = window.setInterval(function(){
+          var idx = idx_arr.pop();
+
+          $($("div.toflip")[idx]).flip({
             direction: flipTransitions[Math.floor(Math.random()*4)],
-            content:'<div class="img-responsive" style="text-align:center;width:'+tileW+'px;">task</div>',
+            content:function(){
+              return '<div class="img-responsive" style="background-color:white;text-align:center;vertical-align:middle;width:'+tileW+'px;">'+fna2[$(this).find('img').attr("src").replace("images/","")]+'</div>'
+            },
             speed:250
           })
+
+          if (idx_arr.length == 0) {
+            window.clearInterval(interv);
+          }
         }, 2000);
 
         $(document).click(function(){
