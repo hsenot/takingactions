@@ -48,6 +48,7 @@
     </nav>
 
     <div class="container" style="padding-top:15px;">
+      <h3 class="text-center">The task is to:</h3>
       <div class="jumbotron">
         <div id="mytask" class="text-center" style="font-size:48px;">
         </div>
@@ -58,7 +59,7 @@
       </div>
 
       <div>
-        <h3 class="text-center">Contribute:</h3>
+        <h3 class="text-center">Get busy, then send us your contribution:</h3>
         <div class="row">
           <div class="col-xs-3 col-md-3 text-center"><img src="bubbles.png" width=100></div>
           <div class="col-xs-3 col-md-3 text-center"><a class="mailto_link" href="mailto:iam@takingactions.org"><img src="email_square.png" width=100></a></div>
@@ -66,10 +67,10 @@
           <div class="col-xs-3 col-md-3 text-center"><img src="moon.png" width=100></div>
         </div>
         <div class="row">
-          <div class="col-xs-3 col-md-3 text-center">Send us an text: <br><a href="sms:0430060XYZ">0430 060 XYZ</a></div>
-          <div class="col-xs-3 col-md-3 text-center">Send us an email: <a class="mailto_link" href="mailto:iam@takingactions.org">iam@takingactions.org</a></div>
-          <div class="col-xs-3 col-md-3 text-center">Send us a letter or a parcel: <br>Taking Action(s)<br>PO Box 24091<br>Melbourne, Vic, 3001</div>
-          <div class="col-xs-3 col-md-3 text-center">Come to the gallery: <br>West Space<br>1/225 Bourke Street<br>Melbourne, Vic, 3000</div>
+          <div class="col-xs-3 col-md-3 text-center">By text: <br><a href="sms:0430060XYZ">0430 060 XYZ</a></div>
+          <div class="col-xs-3 col-md-3 text-center">By email: <br><a class="mailto_link" href="mailto:iam@takingactions.org">iam@takingactions.org</a></div>
+          <div class="col-xs-3 col-md-3 text-center">By letter or parcel: <br>Taking Action(s)<br>PO Box 24091<br>Melbourne, Vic, 3001</div>
+          <div class="col-xs-3 col-md-3 text-center">Or come to the gallery: <br>West Space<br>1/225 Bourke Street<br>Melbourne, Vic, 3000</div>
         </div>
       </div>
     </div>
@@ -127,7 +128,7 @@
           id: task_id
         },
         function(json_data){
-            // Reducing the data to all non-null URLs
+            // Reducing the data to all non-null URLs that correspond to this task
             var json = $.grep(json_data.rows, function(v) {
                 return v.url && v.id == task_id;
             });
