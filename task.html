@@ -15,7 +15,12 @@
     <style>
       .navbar-brand {
           padding: 5px;
-      }    
+      }
+
+      .carousel-inner>.item>img {
+        margin: 0 auto;
+        height: 300px;
+      }
     </style>
     
   </head>
@@ -47,6 +52,11 @@
         <div id="mytask" class="text-center" style="font-size:48px;">
         </div>
       </div>
+
+      <h3 id="titleCarousel" class="text-center"></h3>
+      <div id="contrib-carousel" class="carousel slide" data-ride="carousel">
+      </div>
+
       <div>
         <h3 class="text-center">Contribute:</h3>
         <div class="row">
@@ -74,6 +84,24 @@
         return result && unescape(result[1]) || ""; 
       }
 
+      function pumpACarouselIndicator(slideNb, activeFlag){
+        var activeClass = "";
+        if (activeFlag)
+        {
+          activeClass = 'class="active"';
+        }
+        return '<li data-target="#contrib-carousel" data-slide-to="'+slideNb+'"'+activeClass+'></li>';
+      }
+
+      function pumpACarouselItem(url, activeFlag){
+        var activeClass = "";
+        if (activeFlag)
+        {
+          activeClass = " active";
+        }
+        return '<div class="item'+activeClass+'"><img src="images/'+url+'"></div>';
+      }
+
       var task_id = getUrlVar('id');
 
       // Getting the task from the database
@@ -90,10 +118,54 @@
 
           // Insert task subject into the mailto
           $('.mailto_link').attr("href","mailto:iam@takingactions.org?subject="+encodeURIComponent(task.label));
+        }
+      );
 
-          // 
+      // Getting the contributions into a carousel
+      $.getJSON("ws/ws_get_task_contributions.php",
+        {
+          id: task_id
+        },
+        function(json_data){
+            // Reducing the data to all non-null URLs
+            var json = $.grep(json_data.rows, function(v) {
+                return v.url && v.id == task_id;
+            });
 
-      });
+            // Populating this carousel if there is at least 1 image
+            if (json.length>0 && json[0].url)
+            {
+              // Set carousel title
+              $('#titleCarousel').html(json.length+' previous contribution'+((json.length>1)?"s":"")+':');
+
+              // Indicators
+              var carou = '<ol class="carousel-indicators">';
+              for (var j=0;j<json.length;j++)
+              {
+                carou += pumpACarouselIndicator(j, (j == 0) );
+              }
+              carou += '</ol>';
+
+              // Wrapper for slides
+              carou += '<div class="carousel-inner">';
+              for (var j=0;j<json.length;j++)
+              {
+                carou += pumpACarouselItem(json[j].url, (j == 0) );
+              }
+              carou += '</div>';
+
+              <!-- Controls -->
+              carou +='<a class="left carousel-control" href="#contrib-carousel" data-slide="prev"> \
+                <span class="glyphicon glyphicon-chevron-left"></span> \
+              </a> \
+              <a class="right carousel-control" href="#contrib-carousel" data-slide="next"> \
+                <span class="glyphicon glyphicon-chevron-right"></span> \
+              </a>';
+
+              $('#contrib-carousel').append(carou);              
+            }
+        }
+      );     
 
     </script>
     <script>
