@@ -51,15 +51,15 @@
         <h3 class="text-center">Contribute:</h3>
         <div class="row">
           <div class="col-xs-3 col-md-3 text-center"><img src="bubbles.png" width=100></div>
-          <div class="col-xs-3 col-md-3 text-center"><img src="email_square.png" width=100></div>
+          <div class="col-xs-3 col-md-3 text-center"><a class="mailto_link" href="mailto:iam@takingactions.org"><img src="email_square.png" width=100></a></div>
           <div class="col-xs-3 col-md-3 text-center"><img src="mail_bg.png" width=100></div>
-          <div class="col-xs-3 col-md-3 text-center"><img src="email_square.png" width=100></div>
+          <div class="col-xs-3 col-md-3 text-center"><img src="moon.png" width=100></div>
         </div>
         <div class="row">
-          <div class="col-xs-3 col-md-3 text-center">Send us an text message</div>
-          <div class="col-xs-3 col-md-3 text-center">Send us an email</div>
-          <div class="col-xs-3 col-md-3 text-center">Send us a letter or a parcel</div>
-          <div class="col-xs-3 col-md-3 text-center">Come to the gallery</div>
+          <div class="col-xs-3 col-md-3 text-center">Send us an text: <br><a href="sms:0430060XYZ">0430 060 XYZ</a></div>
+          <div class="col-xs-3 col-md-3 text-center">Send us an email: <a class="mailto_link" href="mailto:iam@takingactions.org">iam@takingactions.org</a></div>
+          <div class="col-xs-3 col-md-3 text-center">Send us a letter or a parcel: <br>Taking Action(s)<br>PO Box 24091<br>Melbourne, Vic, 3001</div>
+          <div class="col-xs-3 col-md-3 text-center">Come to the gallery: <br>West Space<br>1/225 Bourke Street<br>Melbourne, Vic, 3000</div>
         </div>
       </div>
     </div>
@@ -87,6 +87,11 @@
 
           // Insert task text into its div
           $('#mytask').html(task.label);
+
+          // Insert task subject into the mailto
+          $('.mailto_link').attr("href","mailto:iam@takingactions.org?subject="+encodeURIComponent(task.label));
+
+          // 
 
       });
 
