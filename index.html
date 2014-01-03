@@ -12,122 +12,187 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-
     <style>
-      .img-responsive {
-        display:inline-block;
+      .modal-title {
+        text-align:center;
+      }
+
+      .help-block {
+        margin-top: 0px;
+        margin-bottom: 0px;
       }
     </style>
+
   </head>
-  <body style="background-color:white;">
-    <div id="cont">
-      <div id="gridContainer" class="row">
+  <body>
+    <div class="container" style="padding-top:15px;">
+      <div id="tg" class="rounded" style="background-color:white; padding:10px;">
+        <div class="pull-left">
+          <button class="btn btn-inverse" type="button" id="spinButton">Generate</button>
+        </div>
+        <div class="pull-right">
+          <button class="btn btn-inverse" type="button" id="undertakeButton">Undertake</button>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div>
+          <div id="sentence" class="text-center" style="font-size:48px;"></div>
+        </div>
+        <br>
       </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="myCheckoutModal" tabindex="-1" role="dialog" aria-labelledby="myCheckoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myCheckoutModalLabel">Send this task to ... </h4>
+          </div>
+          <form>
+            <div class="form-group modal-body has-error">
+              <input type="email" class="form-control" name="inputEmailAddress" id="inputEmailAddress" placeholder="Email address">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" id="cancelButton" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="checkoutButton" disabled="disabled">Email</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- jQuery plugin for text size -->
+    <script src="FitText.js/jquery.fittext.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
-    <!-- jQuery UI plugin, requirement for Flip! -->
-    <script src="jquery-ui.min.js"></script>
-    <!-- Flipping tile jQuery plugin -->
-    <script src="flip/jquery.flip.min.js"></script>
+    <script src="bootstrapValidator.js"></script>
+    <script src="tabletop/src/tabletop.js"></script>
     <script>
 
-      var fna,fna2,x,interv,idx_arr=[];
-      var tileH = 150;
-      var tileW = 150;
-      var flipTransitions=['lr','rl','tb','bt'];
+      // Loading indicator while the spreadsheet loads
+      $('#sentence').html("<img src='loading.gif'>");
 
-      function shuffle(array) {
-          var p, n, tmp;
-          for (p = array.length; p;) {
-              n = Math.random() * p-- | 0;
-              tmp = array[n];
-              array[n] = array[p];
-              array[p] = tmp;
-          }
+      var a1=[],a2=[],a3=[];
+
+      function getRandomInt (min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
       }
 
-      function pickRandomProperty(obj) {
-          var result;
-          var count = 0;
-          for (var prop in obj)
-              if (Math.random() < 1/++count)
-                 result = prop;
-          return result;
-      }
-
-      var randomColorize = function(){
-        return (Math.random().toString(16) + '000000').slice(2, 8);
-      }
-
-      var pumpADiv = function(){
-        return '<div class="toflip img-responsive"><img src="images/'+fna[pickRandomProperty(fna)]+'" height="'+tileH+'" width="'+tileW+'"></div>';
-      }
-
-      var resize = function(){
-        var h = $(window).height();
-        var w = $(window).width();
-
-        $('#cont').css("margin-top",(h % tileH)/2);
-        $('#gridContainer').css("margin-left",(w % tileW)/2);
-        $("body").css("overflow", "hidden");
-
-        var numberOfTileToCoverScreen = Math.floor(h / tileH) * Math.floor(w / tileW);
-
-        for (i = 0; i < numberOfTileToCoverScreen+1; i++) {
-            idx_arr[i] = i;
-        }
-
-        shuffle(idx_arr);
-
-        $('#gridContainer').empty();
-        for (i=0;i<numberOfTileToCoverScreen;i++)
+      var replaceRandomValueInRange = function(str){
+        var r = /{(\d+)-(\d+)}/;
+        var res = str.match(r);
+        if (res)
         {
-          $('#gridContainer').append($(pumpADiv()));     
+          return str.replace(res[0],getRandomInt(parseInt(res[1]),parseInt(res[2])));
         }
-
+        else
+        {
+          return str;
+        }
       }
 
-      $.getJSON( "ws/ws_get_tasks_and_images.php", function( data ) {
-        fna = {}, fna2 = {};
-        for (r in data.rows)
-        {
-          fna[data.rows[r].task] = data.rows[r].image;
-          fna2[data.rows[r].image]= data.rows[r].task;
-        }
-        resize();
-      });
+      var randomValueAll = function(){
+        var i1 = Math.floor(Math.random()*a1.length);
+        var i2 = Math.floor(Math.random()*a2.length);
+        var i3 = Math.floor(Math.random()*a3.length);
+
+        var d1 = replaceRandomValueInRange(a1[i1]);
+        var d2 = replaceRandomValueInRange(a2[i2]);
+        var d3 = replaceRandomValueInRange(a3[i3]);
+
+        $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
+        $('#sentence').fitText();
+      }
 
       $(document).ready(function(){
 
-        $(window).resize(function() {
-          resize();
+        var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0Asxkb_brURPldDFUNlFzMVdBRnFvTVBnSFFwTkdsM1E&single=true&gid=6&output=html';
+
+        // Loading data from a Google spreadsheet
+        Tabletop.init({
+          key: public_spreadsheet_url,
+          callback: function(data, tabletop) {
+            $.each(data, function(key, value) {
+              if (value.verb) {a1.push(value.verb);}
+              if (value.concept) {a2.push(value.concept);}
+              if (value.modifiermethodmaterial) {a3.push(value.modifiermethodmaterial);}
+            });
+            randomValueAll();
+          },
+          simpleSheet: true
         });
 
-        interv = window.setInterval(function(){
-          var idx = idx_arr.pop();
+        // Spin button: refreshes with a random combination
+        $('#spinButton').on('click',randomValueAll);
 
-          $($("div.toflip")[idx]).flip({
-            direction: flipTransitions[Math.floor(Math.random()*4)],
-            content:function(){
-              return '<div class="img-responsive" style="background-color:white;text-align:center;vertical-align:middle;width:'+tileW+'px;">'+fna2[$(this).find('img').attr("src").replace("images/","")]+'</div>'
-            },
-            speed:250
-          })
-
-          if (idx_arr.length == 0) {
-            window.clearInterval(interv);
-            window.location="project.html";
+        // Validation of form fields
+        $('form').bootstrapValidator({
+          submitButtons: $('#checkoutButton'),
+          live: 'enabled',
+          fields: {
+            // The field name
+            // It is value of the name attribute
+            inputEmailAddress: {
+                // Array of validators
+                validators: {
+                    notEmpty: {
+                      message: ' '
+                    },
+                    emailAddress: {
+                      message: ' '
+                    }
+                }
+            }
           }
-        }, 2000);
-
-        $(document).click(function(){
-          window.location="project.html";
         });
 
+        // Modal on 'undertake' click, hidden by default
+        $('#myCheckoutModal').modal({
+          show: false
+        });
+        $('#undertakeButton').on('click',function(){
+          // Toggling visibility of the modal on click
+          $('#myCheckoutModal').modal('toggle');
+        });
+
+        // Checkout button: insert the task in the database and moves to the detail page
+        $('#checkoutButton').on('click',function(){
+          // Disabling the buttons
+          $('#cancelButton').hide();
+          $('#checkoutButton').addClass('disabled').html('Sending ...');
+
+          // Inserting the task into the table of tasks
+          var p_task_label = $('#sentence').html();
+          $.getJSON("ws/ws_sendmail.php",
+                {
+                  to: $('#inputEmailAddress').val(),
+                  task_label: p_task_label.substring(0,p_task_label.length-2)
+                },
+                function(json){
+                  // Displaying status message
+                  $('#checkoutButton').removeClass('btn-primary').addClass('btn-success').html('Success!');
+
+                  window.setTimeout(function(){
+                    // Now closing the email modal
+                    $('#myCheckoutModal').modal('hide');
+
+                    window.setTimeout(function(){
+                      // Restoring buttons to initial state
+                      $('#checkoutButton').removeClass('btn-success').addClass('btn-primary').html('Email').removeClass('disabled');
+                      $('#cancelButton').show();
+                      // We don't want to reset the email address, as the user might want to send themselves several tasks
+                      //$('#inputEmailAddress').val('');                    
+                    }, 500);
+
+                  }, 1500);
+                }
+          );
+        });
       });
 
     </script>
