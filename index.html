@@ -152,10 +152,12 @@
         });
 
         $('form').on('submit',function(event){
+          // If the email address is validated correctly (i.e. can be pressed), we click the email button
           if (!$('#checkoutButton').attr('disabled'))
           {
             $('#checkoutButton').click();
           }
+          // In all cases, we disable the form submission
           return false;
         });
 
@@ -164,10 +166,17 @@
           show: false
         });
 
+        // If the field is 'clicked', then we focus it
+        $('#inputEmailAddress').click(function(e){
+          $(this).focus(); 
+        });
+
+        // When the modal is entirely visible, we click the input field to give it focus (and get the virtual keyboard to appear)
         $('#myCheckoutModal').on('shown.bs.modal', function () {
-            $('#inputEmailAddress').focus();
+          $('#inputEmailAddress').click();
         })
 
+        // The undertake button toggles the modal
         $('#undertakeButton').on('click',function(){
           // Toggling visibility of the modal on click
           $('#myCheckoutModal').modal('toggle');
@@ -175,16 +184,33 @@
 
         // Checkout button: insert the task in the database and moves to the detail page
         $('#checkoutButton').on('click',function(){
+          var p_task_label = $('#sentence').html();
+          p_task_label = p_task_label.substring(0,p_task_label.length-2);
+
+          // Persisting the task undertaken for subsequent analysis / timeline visualisation
+          $.getJSON("ws/ws_insert_task.php",
+            {
+              task_label: p_task_label
+            },
+            function(json){
+              if (json.inserted_id)
+              {
+                // Now moving to the detail page with this task id
+                console.log('Task ID #'+json.inserted_id+' has been inserted successfully.');
+              }
+            }
+          );         
+
           // Disabling the buttons
           $('#cancelButton').hide();
           $('#checkoutButton').addClass('disabled').html('Sending ...');
 
           // Inserting the task into the table of tasks
-          var p_task_label = $('#sentence').html();
+
           $.getJSON("ws/ws_sendmail.php",
                 {
                   to: $('#inputEmailAddress').val(),
-                  task_label: p_task_label.substring(0,p_task_label.length-2)
+                  task_label: p_task_label
                 },
                 function(json){
                   // Displaying status message
