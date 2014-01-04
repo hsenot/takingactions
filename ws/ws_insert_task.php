@@ -42,6 +42,14 @@ try {
         $inserted_id = $row[0];
     }
 
+    // Inserting a record into the task_undertaken table
+    // This used to be coupled to the access of a given task
+    // ... but now linked to the task creation
+    // It is very likely that a task will therefore only have 1 contribution only
+    $sql = "INSERT INTO task_undertaken (task_id) VALUES (".$inserted_id.")";
+    $recordSet = $pgconn->prepare($sql);
+    $recordSet->execute();
+
     // Due to a bug in IE8/9, we can't set the response header to application/json like we should 
     //header("Content-Type: application/json");
     // but text/html is a valid replacement
