@@ -151,10 +151,23 @@
           }
         });
 
+        $('form').on('submit',function(event){
+          if (!$('#checkoutButton').attr('disabled'))
+          {
+            $('#checkoutButton').click();
+          }
+          return false;
+        });
+
         // Modal on 'undertake' click, hidden by default
         $('#myCheckoutModal').modal({
           show: false
         });
+
+        $('#myCheckoutModal').on('shown.bs.modal', function () {
+            $('#inputEmailAddress').focus();
+        })
+
         $('#undertakeButton').on('click',function(){
           // Toggling visibility of the modal on click
           $('#myCheckoutModal').modal('toggle');
