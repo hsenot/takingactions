@@ -107,6 +107,21 @@
 
         $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
         $('#sentence').fitText();
+
+        // Persisting the discarded previous value into the database
+        $.getJSON("ws/ws_insert_task_discarded.php",
+          {
+            task_label: d1+" "+d2+" "+d3
+          },
+          function(json){
+            if (json.inserted_id)
+            {
+              // Now moving to the detail page with this task id
+              console.log('Discarded task ID #'+json.inserted_id+' has been inserted successfully.');
+            }
+          }
+        );
+
       }
 
       $(document).ready(function(){
