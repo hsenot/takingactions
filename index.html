@@ -142,6 +142,9 @@
             });
             randomValueAll();
           },
+          // Using a proxy value to fix the broken Google session
+          // there is now a need to refresh the server manually after each modification
+          proxy: "tabletop/caching",
           simpleSheet: true
         });
 
