@@ -149,7 +149,12 @@
         });
 
         // Spin button: refreshes with a random combination
-        $('#spinButton').on('click',randomValueAll);
+        $('#spinButton').on('click',function(){
+          // Refreshes with a random combination
+          randomValueAll();
+          // Deselect the button
+          $('#spinButton').blur();
+        });
 
         // Validation of form fields
         $('form').bootstrapValidator({
