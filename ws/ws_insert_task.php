@@ -10,6 +10,21 @@ require_once("inc/database.inc.php");
 require_once("inc/security.inc.php");
 require_once("inc/json.pdo.inc.php");
 
+# Helper function
+function getIP() { 
+    $ip; 
+    if (getenv("HTTP_CLIENT_IP")) 
+        $ip = getenv("HTTP_CLIENT_IP"); 
+    else if(getenv("HTTP_X_FORWARDED_FOR")) 
+            $ip = getenv("HTTP_X_FORWARDED_FOR"); 
+        else if(getenv("REMOTE_ADDR")) 
+                $ip = getenv("REMOTE_ADDR"); 
+            else 
+                $ip = "UNKNOWN";
+
+    return $ip;
+} 
+
 # Retrieve URL arguments
 try {
 	$p_task_label = $_REQUEST['task_label'];
@@ -46,7 +61,7 @@ try {
     // This used to be coupled to the access of a given task
     // ... but now linked to the task creation
     // It is very likely that a task will therefore only have 1 contribution only
-    $sql = "INSERT INTO task_undertaken (task_id) VALUES (".$inserted_id.")";
+    $sql = "INSERT INTO task_undertaken (task_id,ip) VALUES (".$inserted_id.",'".getIP()."')";
     $recordSet = $pgconn->prepare($sql);
     $recordSet->execute();
 

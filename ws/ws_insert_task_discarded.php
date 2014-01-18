@@ -10,6 +10,21 @@ require_once("inc/database.inc.php");
 require_once("inc/security.inc.php");
 require_once("inc/json.pdo.inc.php");
 
+# Helper function
+function getIP() { 
+    $ip; 
+    if (getenv("HTTP_CLIENT_IP")) 
+        $ip = getenv("HTTP_CLIENT_IP"); 
+    else if(getenv("HTTP_X_FORWARDED_FOR")) 
+            $ip = getenv("HTTP_X_FORWARDED_FOR"); 
+        else if(getenv("REMOTE_ADDR")) 
+                $ip = getenv("REMOTE_ADDR"); 
+            else 
+                $ip = "UNKNOWN";
+
+    return $ip;
+} 
+
 # Retrieve URL arguments
 try {
 	$p_task_label = $_REQUEST['task_label'];
@@ -24,7 +39,7 @@ try {
 	$pgconn = pgConnection();
 
     // Inserting the observation
-    $sql = "INSERT INTO task_discarded (label) VALUES ('".$p_task_label."');";
+    $sql = "INSERT INTO task_discarded (label,ip) VALUES ('".$p_task_label."','".getIP()."');";
     $sql = sanitizeSQL($sql);
     //echo $sql;
     $recordSet = $pgconn->prepare($sql);
