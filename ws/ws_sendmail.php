@@ -6,11 +6,12 @@
 	// Extracting parameter values
 	$p_to = $_REQUEST['to'];
 	$p_task_label = $_REQUEST['task_label'];
+	$p_template = $_REQUEST['template'];
 
 	$subject = "Taking Action(s) - Task Reminder";
 
 	// Retrieving email template and substituting variables	
-	$body = file_get_contents('../email.html');
+	$body = file_get_contents('../'.$p_template);
 	$body = str_replace('%task_label%',$p_task_label,$body);
 
 	// Other email parameters
