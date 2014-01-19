@@ -7,8 +7,7 @@
 	$p_to = $_REQUEST['to'];
 	$p_task_label = $_REQUEST['task_label'];
 	$p_template = $_REQUEST['template'];
-
-	$subject = "Taking Action(s) - Task Reminder";
+	$p_subject = $_REQUEST['subject'];
 
 	// Retrieving email template and substituting variables	
 	$body = file_get_contents('../'.$p_template);
@@ -23,7 +22,7 @@
 	$mail->addBCC('lizzysampson@gmail.com');
 	$mail->isHTML(true);                                  // Set email format to HTML
 
-	$mail->Subject = $subject;
+	$mail->Subject = $p_subject;
 	$mail->Body    = $body;
 	//$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
