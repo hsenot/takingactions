@@ -14,10 +14,10 @@
 	$body = str_replace('%task_label%',$p_task_label,$body);
 
 	// Other email parameters
-	$mail->From = 'reminder@takingactions.org';
-	$mail->FromName = 'Taking Action(s)';
+	$mail->From = 'reminder@temporary-agency.com';
+	$mail->FromName = 'Temporary Agency';
 	$mail->addAddress($p_to);
-	$mail->addReplyTo('reply@takingactions.org', 'Taking Action(s)');
+	$mail->addReplyTo('reply@temporary-agency.com', 'Temporary Agency');
 	$mail->addBCC('s3426025@student.rmit.edu.au');
 	$mail->addBCC('lizzysampson@gmail.com');
 	$mail->isHTML(true);                                  // Set email format to HTML

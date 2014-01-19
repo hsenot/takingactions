@@ -1,4 +1,4 @@
-Taking Action(s)
+Temporary Agency
 ================
 
-A collaborative platform website for the art project 'Taking Action(s)'
+A website for the art project 'Temporary Agency'
