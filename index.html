@@ -148,6 +148,17 @@
           simpleSheet: true
         });
 
+        // The 'b' key from the pedal should not randomise if the modal is shown
+        $(document).keypress(function( event ) {
+          if (!$('#myCheckoutModal').hasClass('in'))
+          {
+            if ( event.which == 98 ) {
+              event.preventDefault();
+              randomValueAll();
+            }            
+          }
+        });
+
         // Spin button: refreshes with a random combination
         $('#spinButton').on('click',function(){
           // Refreshes with a random combination
@@ -273,6 +284,6 @@
       ga('send', 'pageview');
 
     </script>
-    
+
   </body>
 </html>
