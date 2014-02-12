@@ -13,6 +13,10 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
     <style>
+      body{
+        font-size: 13px;
+      }
+
       .modal-title {
         text-align:center;
       }
@@ -20,6 +24,17 @@
       .help-block {
         margin-top: 0px;
         margin-bottom: 0px;
+      }
+
+      .panel {
+        position:absolute;
+        width:360px;
+        bottom:0px;
+      }
+
+      .popover {
+        max-width: 180px;
+        text-align: center;
       }
     </style>
 
@@ -41,6 +56,18 @@
         </div>
         <br>
       </div>
+    </div>
+
+    <div id="screenMask" style="background-color: rgba(0, 0, 0, .4);position:absolute;top:0px;bottom:0px;left:0px;right:0px;">
+      <div class="panel panel-default" style="display:none;background-color: rgba(255, 255, 255, 1);">
+        <div class="panel-heading">
+          <h3 class="panel-title" style="text-align:center;">Welcome to the Randomised Assignment Database (R.A.D)</h3>
+        </div>
+        <div class="panel-body">
+          This website is an assignment generator which is part of the <i>Temporary Agency</i> project by Herve Senot and Lizzy Sampson.<br> Explore the R.A.D by clicking <i>Next</i>, keep a record of assignments you might like to undertake by clicking <i>Email me this</i>, and contribute to the project by following the prompts in the email you receive.<br> <i>Temporary Agency</i> will take place at West Space gallery from 6 March - 5 April, 2014.
+        </div>
+        <div class="panel-footer text-center"><button type="button" class="btn btn-success" id="startButton">Start</button></div>
+      </div>  
     </div>
 
     <!-- Modal -->
@@ -166,6 +193,65 @@
           // Deselect the button
           $('#spinButton').blur();
         });
+
+        function renderIntro(hideStuff){
+          // Initial screen display: bring in the popover!
+          $('#spinButton').popover('destroy');
+          $('#undertakeButton').popover('destroy');
+          $('#sentence').popover('destroy');
+          if (!hideStuff)
+          {
+            $('#spinButton').popover({
+              html: true,
+              placement: 'auto top',
+              trigger: 'manual',
+              title: '',
+              content: '<span class="label label-success">Step 1</span><br>Click to generate and display a new assignment.'
+            });
+            $('#spinButton').popover('show');
+
+            $('#undertakeButton').popover({
+              html: true,
+              placement: 'auto top',
+              trigger: 'manual',
+              title: '',
+              content: '<span class="label label-success">Step 3</span><br>Click to send this assignment to your email address.'
+            });
+            $('#undertakeButton').popover('show');
+
+            $('#sentence').popover({
+              html: true,
+              placement: 'auto top',
+              trigger: 'manual',
+              title: '',
+              content: '<span class="label label-success">Step 2</span><br>Your randomised assignment. Click <i>Next</i> to generate another one.'
+            });
+            $('#sentence').popover('show');        
+
+            $('#screenMask').height($(document).height());
+            $('.panel').css('left',$(document).width()/2-$('.panel').width()/2)
+              .css('display','block');
+          }
+          else
+          {
+            $('#screenMask').css('display','none');
+            $('.panel').css('display','none');            
+          }
+        }
+
+        $(window).on('resize',function(){
+          renderIntro();
+        });
+
+        $(window).on('click',function(){
+          renderIntro(true);
+        });
+
+        renderIntro();
+
+        $('#startButton').click(function(){
+          renderIntro(true);
+        })
 
         // Validation of form fields
         $('form').bootstrapValidator({
