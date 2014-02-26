@@ -31,7 +31,8 @@ try {
             "(select count(*) from task_discarded where (current_timestamp - ts_created) < interval '4 hours') as last_4hour,".
             "(select count(*) from task_discarded where (current_timestamp - ts_created) < interval '1 hour') as last_hour,".
             "(select count(*) from task_discarded where (current_timestamp - ts_created) < interval '5 minutes') as last_5mn,".
-            "(select count(*) from task_discarded where (current_timestamp - ts_created) < interval '1 minute') as last_mn";
+            "(select count(*) from task_discarded where (current_timestamp - ts_created) < interval '1 minute') as last_mn,".
+            "(select count(*) from task_discarded where (current_timestamp - ts_created) < interval '10 seconds') as last_10s";
     $recordSet = $pgconn->prepare($sql);
     $recordSet->execute();
 
