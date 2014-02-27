@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Temporary Agency</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      body{
+        font-size: 13px;
+      }
+
+    </style>
+
+  </head>
+  <body>
+    <div class="container" style="padding-top:15px;">
+      <div id="tg" class="rounded" style="background-color:white; padding:10px;">
+        <br>
+        <br>
+        <br>
+        <div>
+          <div id="sentence" class="text-center" style="font-size:48px;"></div>
+        </div>
+        <br>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- jQuery plugin for text size -->
+    <script src="../FitText.js/jquery.fittext.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script src="../bootstrapValidator.js"></script>
+    <script src="../tabletop/src/tabletop.js"></script>
+    <script>
+
+      // Loading indicator while the spreadsheet loads
+      $('#sentence').html("<img src='../pix/loading.gif'>");
+
+      var a1=[],a2=[],a3=[];
+
+      function getRandomInt (min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      var replaceRandomValueInRange = function(str){
+        var r = /{(\d+)-(\d+)}/;
+        var res = str.match(r);
+        if (res)
+        {
+          return str.replace(res[0],getRandomInt(parseInt(res[1]),parseInt(res[2])));
+        }
+        else
+        {
+          return str;
+        }
+      }
+
+      var randomValueAll = function(){
+        var i1 = Math.floor(Math.random()*a1.length);
+        var i2 = Math.floor(Math.random()*a2.length);
+        var i3 = Math.floor(Math.random()*a3.length);
+
+        var d1 = replaceRandomValueInRange(a1[i1]);
+        var d2 = replaceRandomValueInRange(a2[i2]);
+        var d3 = replaceRandomValueInRange(a3[i3]);
+
+        $('#sentence').html(d1+" "+d2+" "+d3+".\n").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
+        $('#sentence').fitText();
+
+        // Persisting the discarded previous value into the database
+        $.getJSON("../ws/ws_insert_task_discarded.php",
+          {
+            task_label: d1+" "+d2+" "+d3
+          },
+          function(json){
+            if (json.inserted_id)
+            {
+              // Now moving to the detail page with this task id
+              console.log('Discarded task ID #'+json.inserted_id+' has been inserted successfully.');
+            }
+          }
+        );
+      }
+
+      var printTask = function(){
+        var p_task_label = $('#sentence').html();
+        p_task_label = p_task_label.substring(0,p_task_label.length-2);
+
+        // Persisting the task undertaken for subsequent analysis / timeline visualisation
+        $.getJSON("../ws/ws_insert_task.php",
+          {
+            task_label: p_task_label
+          },
+          function(json){
+            if (json.inserted_id)
+            {
+              // Now moving to the detail page with this task id
+              console.log('Task ID #'+json.inserted_id+' has been inserted successfully.');
+            }
+          }
+        );         
+
+        $.getJSON("http://192.168.1.8/printer-controller/print.php?callback=?",
+          {
+            mystring: p_task_label
+          },
+          function(json){
+            // Anything to do here?
+          }
+        );
+      };
+
+      $(document).ready(function(){
+
+        var public_spreadsheet_url = 'https://docs.google.com/spreadsheet/pub?key=0Asxkb_brURPldDFUNlFzMVdBRnFvTVBnSFFwTkdsM1E&single=true&gid=6&output=html';
+
+        // Loading data from a Google spreadsheet
+        Tabletop.init({
+          key: public_spreadsheet_url,
+          callback: function(data, tabletop) {
+            $.each(data, function(key, value) {
+              if (value.verb) {a1.push(value.verb);}
+              if (value.concept) {a2.push(value.concept);}
+              if (value.modifiermethodmaterial) {a3.push(value.modifiermethodmaterial);}
+            });
+            randomValueAll();
+          },
+          // Using a proxy value to fix the broken Google session
+          // there is now a need to refresh the server manually after each modification
+          proxy: "../tabletop/caching",
+          simpleSheet: true
+        });
+
+        var lock1=false, lock2=false;
+        // The 'b' key from the pedal should not randomise if the modal is shown
+        $(document).keydown(function( event ) {
+          if (!lock1 && !lock2)
+          {
+            if ( event.which == 65 ) {
+              lock1 = true;
+              randomValueAll();
+            }
+            if (event.which == 66) {
+              lock2 = true;
+              printTask();
+            }
+          }
+        });
+
+        $(document).keyup(function( event ) {
+          if ( event.which == 65 ) {
+            lock1 = false;
+          }
+          if (event.which == 66) {
+            lock2 = false;
+          }
+        });
+
+      });
+
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-47332013-1', 'temporary-agency.com');
+      ga('send', 'pageview');
+
+    </script>
+
+  </body>
+</html>
