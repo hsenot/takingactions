@@ -102,7 +102,7 @@
 
       var printTask = function(){
         var p_task_label = $('#sentence span').html();
-        p_task_label = p_task_label.substring(0,p_task_label.length-2);
+        p_task_label = p_task_label.substring(0,p_task_label.length-1);
 
         // Persisting the task undertaken for subsequent analysis / timeline visualisation
         $.getJSON("../ws/ws_insert_task.php",
