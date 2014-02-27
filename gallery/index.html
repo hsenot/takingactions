@@ -17,6 +17,9 @@
         font-size: 13px;
       }
 
+      div.sentenceClass {
+        text-align: center;
+      }
     </style>
 
   </head>
@@ -71,7 +74,7 @@
         var d3 = replaceRandomValueInRange(a3[i3]);
 
         $('#wrapper').empty()
-                    .append('<div id="sentence" class="text-center"></div>');
+                    .append('<div id="sentence" class="sentenceClass"></div>');
 
         $('#sentence').html("<span>"+d1+" "+d2+" "+d3+".</span>").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
 
@@ -98,7 +101,7 @@
       }
 
       var printTask = function(){
-        var p_task_label = $('#sentence').html();
+        var p_task_label = $('#sentence span').html();
         p_task_label = p_task_label.substring(0,p_task_label.length-2);
 
         // Persisting the task undertaken for subsequent analysis / timeline visualisation
