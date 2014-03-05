@@ -45,7 +45,7 @@
       // Loading indicator while the spreadsheet loads
       $('#sentence').html("<img src='../pix/loading.gif'>");
 
-      var a1=[],a2=[],a3=[];
+      var a1=[],a2=[],a3=[],a4=[];
 
       function getRandomInt (min, max) {
           return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -68,6 +68,7 @@
         var i1 = Math.floor(Math.random()*a1.length);
         var i2 = Math.floor(Math.random()*a2.length);
         var i3 = Math.floor(Math.random()*a3.length);
+        var i4 = Math.floor(Math.random()*a4.length);
 
         var d1 = replaceRandomValueInRange(a1[i1]);
         var d2 = replaceRandomValueInRange(a2[i2]);
@@ -76,7 +77,8 @@
         $('#wrapper').empty()
                     .append('<div id="sentence" class="sentenceClass"></div>');
 
-        $('#sentence').html("<span>"+d1+" "+d2+" "+d3+".</span>").css("color",'#'+(Math.random().toString(16) + '000000').slice(2, 8));
+        $('#sentence').html("<span>"+d1+" "+d2+" "+d3+".</span>")
+            .css("color",a4[i4]);
 
         $('#sentence').css({
           width: $(window).width()-200,
@@ -140,6 +142,7 @@
               if (value.verb) {a1.push(value.verb);}
               if (value.concept) {a2.push(value.concept);}
               if (value.modifiermethodmaterial) {a3.push(value.modifiermethodmaterial);}
+              if (value.colour) {a4.push(value.colour);}
             });
             randomValueAll();
           },
